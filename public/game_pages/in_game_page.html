@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Walter+Turncoat&effect=vintage' rel='stylesheet' type='text/css'>
+
+  <title>Fibbage In Game Page</title>
+
+  <style>
+   html {
+      height: 100%;
+      width: 100%;
+    }
+    
+    body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      color: white;
+      background-color: #b9a13f;
+    }
+    
+    #awaiting-all-players-submissions-indicator {
+      display: none;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    section {
+      display: block;
+      margin: auto;
+      text-align: center;
+    }
+    
+    .centered-group {
+      display: inline-block;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #b9a13f;
+    }
+    
+    #factoid-display {
+      margin-top: 15px;
+      
+    }
+    
+    #user-answer-submit {
+      margin-top: 10px;
+    }
+    
+    #user-answer-input-prompt {
+      margin-bottom: 5px;
+    }
+    
+    .text-align-wrapper {
+      text-align: center;
+    }
+    
+    #answer-display {
+      display: none;
+      max-width: 95%;
+      position: relative;
+      margin-top: 10px;
+    }
+    
+    .answer-button {
+      display: inline-block;
+      margin-top: 3px;
+      background-color: #18b14d;
+      border: 4px solid white;
+      color: white;
+      word-wrap: break-word;
+      white-space: normal;
+      max-width: 100%;
+    }
+    
+      /*!
+      * Some animations thanks to: 
+      * animate.css -http://daneden.me/animate
+      * Version - 3.5.0
+      * Licensed under the MIT license - http://opensource.org/licenses/MIT
+      *
+      * Copyright (c) 2016 Daniel Eden
+      */
+
+      @-webkit-keyframes pulse {
+        from {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+      }
+
+      50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+      }
+
+      to {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+      }
+    }
+
+    @keyframes pulse {
+      from {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+      }
+
+      50% {
+        -webkit-transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale3d(1.05, 1.05, 1.05);
+      }
+
+      to {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+      }
+    }
+
+    .pulse {
+      -webkit-animation-name: pulse;
+      animation-name: pulse;
+      
+      -webkit-animation-duration: 1s;
+      animation-duration: 1s;
+      
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+      
+      -webkit-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
+    }
+    
+    .answer-button:hover {
+      background-color: rgb(59, 156, 216);
+    }
+    
+    .answer-button:active {
+      background-color: rgb(44, 117, 162);
+    }
+    
+    .animated-2s {
+      -webkit-animation-delay: .5s;
+      animation-delay: .5s;
+      -webkit-animation-duration: 2s;
+      animation-duration: 2s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    
+    @-webkit-keyframes color-to-color {
+      from { background-color: #b9a13f; }
+	  to { background-color: #9e8a36; }
+    }
+
+    @keyframes color-to-color {
+      from { background-color: #b9a13f; }
+      to { background-color: #9e8a36; }
+    }
+
+    .color-to-color {
+      -webkit-animation-name: color-to-color;
+      animation-name: color-to-color;
+    }
+    
+    /* mobile portrait-ish */
+    @media screen and (max-height: 650px) {
+      h1 {
+        font-size: 3.5em;
+      }
+      
+      #game-start-timer-display {
+        font-size: 5em;
+      }
+    }
+    
+    /* Mobile landscape-ish */
+    @media screen and (max-height: 400px) {
+      header {
+        left: 15px;
+        text-align: none;
+        width: 20%;
+        text-align: center;
+      }
+      
+      h1 {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 2.5em;
+      }
+      
+      #game-start-timer-display {
+        font-size: 3em;
+      }
+    }
+  </style>
+  
+</head>
+<body>
+  <div id="awaiting-all-players-submissions-indicator" class="pulse">Waiting for other players to submit...</div>
+  <section id="factoid-display-wrapper">
+    <div id="factoid-display" class="color-to-color animated-2s centered-group"></div>
+  </section>
+  <section id="user-answer-submit-wrapper">
+    <div id="user-answer-submit" class="color-to-color animated-2s centered-group">
+      <div id="user-answer-input-prompt">Enter a convincing answer here</div>
+      <input id="user-answer-input" type="text" >
+      <button id="user-answer-input-button" type="button">Submit</button>
+    </div>
+  </section>
+  <section id="answer-display-wrapper">
+    <div id="answer-display" class="color-to-color animated-2s centered-group">
+      <div>Choose the answer you think is correct</div>
+    </div>
+  </section>
+</body>
+</html>

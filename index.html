@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <!-- Tells mobile devices to treat page as responsive and not to assume it is a non-responsive desktop site and then try to zoom out the page so that it looks like a desktop site. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Walter+Turncoat&effect=vintage' rel='stylesheet' type='text/css'>
+  <title>Fabulage</title>
+  <style>
+    html {
+      height: 100%;
+      width: 100%;
+    }
+    
+    body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      color: white;
+      background-color: #b9a13f;
+    }
+    
+    header {
+      display: block;
+      position: absolute;
+      width: 100%;
+      text-align: center;
+    }
+    
+    h1 {
+      font-family: papyrus, 'Walter Turncoat', arial, sans-serif;
+      font-size: 100px;
+    }
+    
+    /* for Google webfonts */
+    .font-effect-vintage {
+      color: #FFFFFF;
+    }
+    
+    h2, h5 {
+      color: white;
+      text-shadow: 0px 0px 9px #7601cc;
+    }
+    
+    #game-start-timer-display {
+      display: none;
+      position: fixed;
+      width: 100%;
+      top: 25%;
+      text-align: center;
+      pointer-events: none;
+      color: rgba(138, 43, 226, 0.75);
+      font-size: 10em;
+    }
+    
+    .no-vert-margins {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    
+    .vertical-align-table {
+      display: table;
+      height: 100%;
+      width: 100%;
+    }
+    
+    .vertical-align-table-cell {
+      display: table-cell;
+      height: 100%;
+      width: 100%;
+      vertical-align: middle;
+    }
+    
+    section {
+      display: block;
+      margin: auto;
+      text-align: center;
+    }
+    
+    .centered-group {
+      display: inline-block;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #b9a13f;
+    }
+    
+    #join {
+      padding-bottom: 20px;
+    }
+    
+    #join-button {
+      margin-top: 10px;
+      width: 50%;
+      border-radius: 5px;
+      background-color: antiquewhite;
+    }
+    
+    #join-button:hover {
+      background-color: white;
+    }
+    
+    .text-align-wrapper {
+      text-align: center;
+    }
+    
+    .join-input-glow {
+      box-shadow: 0px 0px 8px #3801cc;
+      border: none;
+    }
+    
+    #username-input {
+      display: inline-block;
+      margin-top: 1px;
+      margin-bottom: 5px;
+    }
+    
+    #room-code-input {
+      display: inline-block;
+      margin-top: 1px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    
+    #invalid-credentials-message-display {
+      position: relative;
+      top: .7em;
+      margin: 0;
+      padding: 0;
+      color: darkred;
+      font-size: .9em;
+      line-height: 0px;
+    }
+    
+    #joined-players-display-container {
+      margin-top: 10px;
+      padding-top: 7px;
+    }
+    
+    .formatting-input {
+      height: 0em;
+      margin: 0px;
+      padding: 0px;
+      border: none;
+      display: block;
+      visibility: hidden;
+    }
+    
+    #joined-players-display {
+      display: inline-block;
+      width: 151px;
+      margin: 0px;
+      padding: 0px;
+      text-align: center;
+      word-wrap: break-word;
+    }
+    
+    .no-bullets {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #player-list {
+      font-family: monospace;
+    }
+    
+    #player-list li {
+      border-bottom: 1px dotted antiquewhite;
+    }
+    
+    #everybody-in {
+      margin-top: 10px;
+    }
+    
+    #everybody-in-button {
+      background-color: aqua;
+      border-radius: 5px;
+    }
+    
+    /*!
+    * Some animations thanks to: 
+    * animate.css -http://daneden.me/animate
+    * Version - 3.5.0
+    * Licensed under the MIT license - http://opensource.org/licenses/MIT
+    *
+    * Copyright (c) 2016 Daniel Eden
+    */
+    .animated-2s {
+      -webkit-animation-delay: .5s;
+      animation-delay: .5s;
+      -webkit-animation-duration: 2s;
+      animation-duration: 2s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    
+    @-webkit-keyframes color-to-color {
+      from { background-color: #b9a13f; }
+	  to { background-color: #9e8a36; }
+    }
+
+    @keyframes color-to-color {
+      from { background-color: #b9a13f; }
+      to { background-color: #9e8a36; }
+    }
+
+    .color-to-color {
+      -webkit-animation-name: color-to-color;
+      animation-name: color-to-color;
+    }
+    
+    /* mobile portrait-ish */
+    @media screen and (max-height: 650px) {
+      h1 {
+        font-size: 3.5em;
+      }
+      
+      #game-start-timer-display {
+        font-size: 5em;
+      }
+    }
+    
+    /* Mobile landscape-ish */
+    @media screen and (max-height: 400px) {
+      header {
+        left: 15px;
+        text-align: none;
+        width: 20%;
+        text-align: center;
+      }
+      
+      h1 {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 2.5em;
+      }
+      
+      #game-start-timer-display {
+        font-size: 3em;
+      }
+    }
+    
+    /* Really small mobile portrait / page is shrunk vertically because text input is up */
+    @media screen and (max-height: 300px) and (max-width: 360px) {
+      header {
+        left: 2px;
+      }
+      
+      h1 {
+        font-size: 1em;
+      }
+    }
+    
+  </style>
+</head>
+<body>
+  <header><h1>Fabulage</h1></header>
+  <div id="game-start-timer-display">
+    <div id="game-start-timer-text-display">GAME STARTS IN</div>
+    <div id="game-start-timer-number-display"></div>
+  </div>
+  <div class="vertical-align-table">
+      <div class="vertical-align-table-cell">
+        <section id="join-wrapper">
+          <div class="color-to-color animated-2s centered-group" id='join'>
+            <h5 class="no-vert-margins">Username</h5>
+            <div class="text-align-wrapper">
+              <input class="join-input-glow" id="username-input" type="text">
+            </div>
+            <h5 class="no-vert-margins">Room Code</h5>
+            <div class="text-align-wrapper">
+              <input class="join-input-glow" id="room-code-input" type="text">
+            </div>
+            <button type="button" id="join-button"><h2>Join</h2></button>
+            <p id='invalid-credentials-message-display'></p>
+          </div>
+        </section>
+        <section id="joined-players-display-cointainer-wrapper">
+          <!-- This input is to get this section to be the same size as the one above. Thus it is for formatting, not at all user interaction. -->
+          
+          <div class="color-to-color animated-2s centered-group" id="joined-players-display-container">
+            <input class="formatting-input" type="text">
+            <div class="text-align-wrapper">
+              <div id="joined-players-display">
+                <h5 class="no-vert-margins">Player List</h5>
+                <ul id="player-list" class="no-bullets"></ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="everybody-in-wrapper">
+          <!-- This input is to get this section to be the same size as the one above. Thus it is for formatting, not at all user interaction. -->
+          
+          <div class="color-to-color animated-2s centered-group" id="everybody-in">
+            <input class="formatting-input" type="text">
+            <div class="text-align-wrapper">
+              <button id="everybody-in-button" type="button">Everybody's In!</button>
+            </div>
+          </div>
+        </section>
+      </div>
+  </div>
+  
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/index_scripts/client.js"></script>
+</body>
+</html>
