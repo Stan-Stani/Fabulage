@@ -98,7 +98,9 @@ var numberOfUsersDoneSelecting = 0;
 var selectedAnswerPool = [];
 // Handles initial client connection and data interchange between server and client after that
 function handleClientConnects() {
-  var fabFactoids = JSON.parse(fs.readFileSync(__dirname + '/game_files/fibbage/fib_factoids.json'))
+//  var fabFactoids = JSON.parse(fs.readFileSync(__dirname + '/game_files/fibbage/fib_factoids.json'))
+  
+  var fabFactoids = JSON.parse(fs.readFileSync(__dirname + '/game_files/my_factoids/fab_factoids.json'))
   
   // Event listener, runs callback function on a client (socket) connnection event that handles/takes care of this specific client connection
   io.on('connection', function(socket) {
@@ -309,6 +311,63 @@ function handleClientConnects() {
       }
     });
     
+    app.on('listen for answer submission', function() {
+      socket.on('answer submission', answerSubmissionParentFunction);
+    })
+    
+    function answerSubmissionParentFunction(answer) {
+      answerSubmissionLogic(answer);
+    }
+
+    function answerSubmissionLogic(answer) {
+      var currentSocket = socket;
+      console.log('answer submission logic invoked');
+      // Conditional prevents client from resubmitting answer
+      console.log('CURRENT ANSWER SHOULDN\'T BE DEFINED AND ITS VALUE IS: ' + currentSocket.currentAnswer);
+      if (!currentSocket.currentAnswer) {
+        currentSocket.currentAnswer = answer;
+        answerPool.push(answer);
+
+        var currentClients = io.sockets.sockets;
+        var numberOfCurrentUsers = 0;
+        var numberOfAnsweredCurrentUsers = 0;
+        for (var k = 0; k < currentClients.length; k++) {
+         if (currentClients[k].username) {
+            numberOfCurrentUsers ++;
+          }
+
+          // If the currentClient is a user and has submitted an answer for this session
+          if (currentClients[k].username && currentClients[k].currentAnswer) {
+            numberOfAnsweredCurrentUsers ++;
+          }
+        }
+
+          // If all the users have submitted their answers
+          if (numberOfAnsweredCurrentUsers === numberOfCurrentUsers) {
+
+
+            // add correct answer and then shuffle
+            answerPool.push(randFactoid.answer);
+            answerPool = shuffle(answerPool);
+
+            io.emit('answer pool', answerPool)
+            console.log('emmiting pool');
+
+            // Get's us the F*** out of this crazy nesting. I'll need to clean all this up someday.
+            app.emit('handle answer selection');
+
+            
+
+          }
+          
+          // Get rid of the answer submission listeners inside this monstrous nesting.
+            console.log('FOR: ' + currentSocket.username);
+            console.log('listeners bef remov:' + currentSocket.listeners('answer submission'));
+              currentSocket.removeListener('answer submission', answerSubmissionParentFunction);
+            console.log('listeners aft remov:' + currentSocket.listeners('answer submission'));
+        console.log('answer submission logic finished');
+      }
+    }
     
     
     
@@ -323,66 +382,12 @@ function handleClientConnects() {
 
     io.emit('new factoid', randFactoid.question);
 
-    // Add these event listeners to all the clients
-    for (var i = 0; i < io.sockets.sockets.length; i++) {
-      // Captures i
-      capturerFunction(i);
-
-      function capturerFunction(i) {
-        io.sockets.sockets[i].on('answer submission', answerSubmissionParentFunction);
-
-        function answerSubmissionParentFunction(answer) {
-          answerSubmissionLogic(answer, io.sockets.sockets[i]);
-        }
-
-        function answerSubmissionLogic(answer, currentSocket) {
-          console.log('answer submission logic invoked');
-          // Conditional prevents client from resubmitting answer
-          console.log('CURRENT ANSWER DEFINED AS: ' + currentSocket.currentAnswer);
-          if (!currentSocket.currentAnswer) {
-            currentSocket.currentAnswer = answer;
-            answerPool.push(answer);
-
-            var currentClients = io.sockets.sockets;
-            var numberOfCurrentUsers = 0;
-            var numberOfAnsweredCurrentUsers = 0;
-            for (var k = 0; k < currentClients.length; k++) {
-             if (currentClients[k].username) {
-                numberOfCurrentUsers ++;
-              }
-
-              // If the currentClient is a user and has submitted an answer for this session
-              if (currentClients[k].username && currentClients[k].currentAnswer) {
-                numberOfAnsweredCurrentUsers ++;
-              }
-            }
-
-              // If all the users have submitted their answers
-              if (numberOfAnsweredCurrentUsers === numberOfCurrentUsers) {
-
-
-                // add correct answer and then shuffle
-                answerPool.push(randFactoid.answer);
-                answerPool = shuffle(answerPool);
-
-                io.emit('answer pool', answerPool)
-                console.log('emmiting pool');
-
-                // Get's us the F*** out of this crazy nesting. I'll need to clean all this up someday.
-                app.emit('handle answer selection');
-
-                // Get rid of the answer submission listeners inside this monstrous nesting.
-                for (var i = 0; i < io.sockets.sockets.length; i++) {
-                  io.sockets.sockets[i].removeListener('answer submission', answerSubmissionParentFunction);
-                }
-                
-              }
-            console.log('answer submission logic finished');
-          }
-        }
-      }
-    }
+    app.emit('listen for answer submission');
   }
+  
+  
+  
+  
   
   // Can't be in socket or there will be an event listener for every socket connect. TODO check if handle answer selection has same problem
   app.on('factoidLoopFinished', function() {
