@@ -1,0 +1,27 @@
+{
+  "name": "fabulage",
+  "version": "0.0.0",
+  "description": "\"Fibbage\" clone.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.13.3",
+    "serve-favicon": "^2.3.0",
+    "socket.io": "^1.3.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyclingLinguist/Fabulage.git"
+  },
+  "keywords": [
+    "fibbage",
+    "trivia",
+    "game",
+    "wordgame"
+  ],
+  "author": "Cycling Linguist",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/cyclingLinguist/Fabulage/issues"
+  },
+  "homepage": "https://github.com/cyclingLinguist/Fabulage#readme"
+}
