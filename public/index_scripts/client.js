@@ -170,11 +170,11 @@ function alertClientConnect() {
 }
 
 
-	var Notification = window.Notification || window.mozNotification || window.webkitNotification;
-
-	Notification.requestPermission(function (permission) {
-		console.log(permission);
-	});
+//	var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+//
+//	Notification.requestPermission(function (permission) {
+//		console.log(permission);
+//	});
 
 
 
@@ -375,18 +375,43 @@ function handleServerEmits() {
             awaitingAllPlayersSubmissionsIndicator.style.display = 'none';
           });
           
-          socket.on('selected answers', function(selectedAnswers) {
+          socket.on('all answer data', function(allAnswerData) {
             console.log('selected answers received');
             var pickedExplanationDiv = document.createElement('div');
             pickedExplanationDiv.innerHTML = 'Answers players picked';
             var correctAnswerExplanationDiv = document.createElement('div');
             correctAnswerExplanationDiv.innerHTML = 'Correct answer';
             var correctAnswer = document.createElement('h3')
-            correctAnswer.innerHTML = selectedAnswers.correct;
+            correctAnswer.innerHTML = allAnswerData.correct;
             var ul = document.createElement('ul')
-            for (var i = 0; i < selectedAnswers.selected.length; i++) {
+            for (var i = 0; i < allAnswerData.selectedAnswerDataPool.length; i++) {
+             
+            
+              var usersWhoSubmittedAnswerText = buildUsersWhoSubmittedAnswerText();
+              
+              // Build the text that describes which users submitted this answer
+              function buildUsersWhoSubmittedAnswerText() {
+                var usersWhoSubmittedAnswerText;
+                allAnswerData.selectedAnswerDataPool[i].usersWhoSubmittedSelectedAnswer.forEach(function(currentValue, index, array) {
+                  // If this is the first user who submitted answer then add its name into usersWhoSubmittedAnswerText, else if the first answer has been added, place a comma and then add the next user
+                  if (!usersWhoSubmittedAnswerText) {
+                    usersWhoSubmittedAnswerText = '(submitted by: ' + currentValue;
+                  } else {
+                    usersWhoSubmittedAnswerText += ', ' + currentValue
+                  }
+                  console.log('usersWhoSubmittedAnswer text: ' + usersWhoSubmittedAnswerText);
+                });
+                // If the array isn't empty finish formatting the text and return it, else it is empty and therefore there are no users who submitted this answer, i.e. it is a correct answer that nobody submitted, so just return an empty string.
+                if (allAnswerData.selectedAnswerDataPool[i].usersWhoSubmittedSelectedAnswer[0]) {
+                  usersWhoSubmittedAnswerText += ')'
+                  return usersWhoSubmittedAnswerText;
+                } else return '';
+              }
+            
               var li = document.createElement('li');
-              li.innerHTML = selectedAnswers.selected[i];
+              var userPickedAnswerText = allAnswerData.selectedAnswerDataPool[i].selectingUser + ' picked: ' + allAnswerData.selectedAnswerDataPool[i].selectedAnswer;
+              
+              li.innerHTML = userPickedAnswerText + ' ' + usersWhoSubmittedAnswerText;
               ul.appendChild(li);
             }
             answerDisplay.innerHTML = '';

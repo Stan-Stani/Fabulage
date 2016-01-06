@@ -1,4 +1,6 @@
 //TODO: Prevent clients from loggin in when a game is running.
+//TODO: BUG: Server will get locked into a game if last user leaves while game is running game start timer
+//TODO: BUG: Players can join the game when the button says game in progress when the game has ended. This is possible because the button doesn't update itself if the game has ended unless the screen is refreshed. The game will even start and include such players. This bug is just confusing for the user. "Why can I join a game if it is in progress?" Answer: It's not really in progress the button just doesn't update itself. The game has finished since you loaded the page but the button only tells you that a game was in progress when you originally loaded the page.
 
 // Many of the comments and logic in this and associated files are inspired by or copied from socket.io/get-started/chat/ and more from their website.
 
@@ -93,9 +95,9 @@ var gameStarted = false;
 var everybodyInHasAlreadyBeenClicked = false;
 var gameStartTimer;
 var randFactoid;
-var answerPool = [];
+var submittedAnswerPoolAndCorrect = [];
 var numberOfUsersDoneSelecting = 0;
-var selectedAnswerPool = [];
+var selectedAnswerDataPool = [];
 // Handles initial client connection and data interchange between server and client after that
 function handleClientConnects() {
 //  var fabFactoids = JSON.parse(fs.readFileSync(__dirname + '/game_files/fibbage/fib_factoids.json'))
@@ -118,6 +120,8 @@ function handleClientConnects() {
 
     // Does stuff when this client disconnects
     socket.on('disconnect', function () {
+    
+    
       // If the user has logged in before they disconnect
       if (username !== undefined) {
         console.log(username + ' disconnected');
@@ -133,15 +137,21 @@ function handleClientConnects() {
         // End game if no users are left in game (this will probably result in a buggy next game: may need to clear all these variables when a user joins and also remove some event listeners) 
         console.log('Users left in game after most recent disconnect (happened @ ' + new Date + '): ' + tabulateSockets('users').length);
         if (tabulateSockets('users').length === 0) {
+            
+         
           // Reset these variables for the next question
-          answerPool = [];
+          submittedAnswerPoolAndCorrect = [];
           numberOfUsersDoneSelecting = 0;
-          selectedAnswerPool = [];
+          selectedAnswerDataPool = [];
 
           // Resets user game state variables
-          tabulateSockets('users').forEach(function(element, index, array) {
-            array[index].currentAnswer = undefined;
+          tabulateSockets('users').forEach(function(currentValue, index, array) {
+            array[index].submittedAnswer = undefined;
             array[index].alreadySelectedAnswer = undefined
+            
+             // TODO: This is only a short term solution to managing event listeners on sockets after they disconnect and reconnect. Eventually I'll have to have a better way to remove only the relevant listeners etc.
+          // Removes all event listeners from all users after the last user disconnects
+            currentValue.removeAllListeners
         
           });
           
@@ -283,37 +293,63 @@ function handleClientConnects() {
         }
     });
     
-    app.on('handle answer selection', function () {
+    app.on('handle answer selection', appHandleAnswerSelection);
+    
+    function appHandleAnswerSelection() {
 
       socket.on('selected answer', clientSelectedAnswer);
       
-      function clientSelectedAnswer(answer) {
+      function clientSelectedAnswer(selectedAnswer) {
         if (!socket.alreadySelectedAnswer) {
           numberOfUsersDoneSelecting++;
           console.log('answer selected');
-          selectedAnswerPool.push(answer);
+          var usersWhoSubmittedSelectedAnswer = []
+          // Determines which users submitted the answer that THIS user has just selected
+          tabulateSockets('users').forEach(function(currentValue, index, array) {
+            if (selectedAnswer === currentValue.submittedAnswer) {
+              usersWhoSubmittedSelectedAnswer.push(currentValue.username);
+            }
+          });
+          var answerData = {usersWhoSubmittedSelectedAnswer: usersWhoSubmittedSelectedAnswer, selectedAnswer: selectedAnswer, selectingUser: socket.username}
+          selectedAnswerDataPool.push(answerData);
           console.log(tabulateSockets('users').length +'"'+ numberOfUsersDoneSelecting);
+          // If this is the last socket that needs to select an answer
           if (tabulateSockets('users').length === numberOfUsersDoneSelecting) {
-            var selectedAnswers = {selected: selectedAnswerPool, correct: randFactoid.answer};
-            io.emit('selected answers', selectedAnswers);
+            var allAnswerData = {selectedAnswerDataPool: selectedAnswerDataPool, correct: randFactoid.answer};
+            io.emit('all answer data', allAnswerData);
             // Reinit numberOfUsersDoneSelecting etc. for next time
             numberOfUsersDoneSelecting = 0;
-            selectedAnswerPool = [];
+            selectedAnswerDataPool = [];
             console.log('limit twixe?');
             function factoidLoopFinishedEvent() {
               app.emit('factoidLoopFinished');
             }
-            setTimeout(factoidLoopFinishedEvent, 5000);
+            // Time that the results of the factoid loop is displayed is a function of (and relatively proportional to) the number of players
+            setTimeout(factoidLoopFinishedEvent, (tabulateSockets('users').length * 1000) + 4000);
             socket.alreadySelectedAnswer = true;
           }
         }
+        // Remove this listener from the socket so it can only select (as far as the server is concerned) the first answer it clicks
         socket.removeListener('selected answer', clientSelectedAnswer);
       }
-    });
+      
+      // Remove this listener so that when the next game starts it no longer exists and when that game creates the same listener there will only be 1
+      app.removeListener('handle answer selection', appHandleAnswerSelection);
+    }
     
-    app.on('listen for answer submission', function() {
-      socket.on('answer submission', answerSubmissionParentFunction);
-    })
+    app.on('listen for answer submission', listenForAnswerSubmission)
+    
+    function listenForAnswerSubmission() {
+      if (socket.username) {
+        socket.on('answer submission', answerSubmissionParentFunction);
+        console.log('ADDED ANSWER SUBMISSION LISTENER. Here are the number of those listeners currently added to this socket: (socket username:' + socket.username + ') ' + socket.listeners('answer submission', answerSubmissionParentFunction).length);
+      }
+      
+      // Remove this listener so only one listener of this type is ever active (On game start this listener is added, so if it weren't removed after it is triggered every new game would add an additional listener
+      app.removeListener('listen for answer submission', listenForAnswerSubmission);
+      
+      console.log('number of listen for answer submission listeners' + app.listeners('listen for answer submission', answerSubmissionParentFunction).length);
+    }
     
     function answerSubmissionParentFunction(answer) {
       answerSubmissionLogic(answer);
@@ -323,10 +359,10 @@ function handleClientConnects() {
       var currentSocket = socket;
       console.log('answer submission logic invoked');
       // Conditional prevents client from resubmitting answer
-      console.log('CURRENT ANSWER SHOULDN\'T BE DEFINED AND ITS VALUE IS: ' + currentSocket.currentAnswer);
-      if (!currentSocket.currentAnswer) {
-        currentSocket.currentAnswer = answer;
-        answerPool.push(answer);
+      console.log('CURRENT ANSWER SHOULDN\'T BE DEFINED AND ITS VALUE IS: ' + currentSocket.submittedAnswer);
+      if (!currentSocket.submittedAnswer) {
+        currentSocket.submittedAnswer = answer;
+        submittedAnswerPoolAndCorrect.push(answer);
 
         var currentClients = io.sockets.sockets;
         var numberOfCurrentUsers = 0;
@@ -337,7 +373,7 @@ function handleClientConnects() {
           }
 
           // If the currentClient is a user and has submitted an answer for this session
-          if (currentClients[k].username && currentClients[k].currentAnswer) {
+          if (currentClients[k].username && currentClients[k].submittedAnswer) {
             numberOfAnsweredCurrentUsers ++;
           }
         }
@@ -347,10 +383,10 @@ function handleClientConnects() {
 
 
             // add correct answer and then shuffle
-            answerPool.push(randFactoid.answer);
-            answerPool = shuffle(answerPool);
+            submittedAnswerPoolAndCorrect.push(randFactoid.answer);
+            submittedAnswerPoolAndCorrect = shuffle(submittedAnswerPoolAndCorrect);
 
-            io.emit('answer pool', answerPool)
+            io.emit('answer pool', submittedAnswerPoolAndCorrect)
             console.log('emmiting pool');
 
             // Get's us the F*** out of this crazy nesting. I'll need to clean all this up someday.
@@ -393,13 +429,13 @@ function handleClientConnects() {
   app.on('factoidLoopFinished', function() {
   
     // Reset these variables for the next question
-    answerPool = [];
+    submittedAnswerPoolAndCorrect = [];
     numberOfUsersDoneSelecting = 0;
-    selectedAnswerPool = [];
+    selectedAnswerDataPool = [];
     
     // Resets user game state variables
     tabulateSockets('users').forEach(function(element, index, array) {
-      array[index].currentAnswer = undefined;
+      array[index].submittedAnswer = undefined;
       array[index].alreadySelectedAnswer = undefined
     });
     io.emit('prepare for new factoid');
