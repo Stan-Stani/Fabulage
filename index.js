@@ -134,6 +134,12 @@ function handleClientConnects() {
           }
         }
         
+        // Remove this listener so only one listener of this type is ever active (When a socket connects this listener is added, so if it weren't removed when the socket disconnects the listener would still exist. (If the listener were attached to the socket emitter I would not have to manually remove it because the socket's event listeners are removed automatically when the socket disconnects. But this event is added to the app emitter which doesn't lose its event listeners when a socket disconnects even if the listeners were added because of a socket connection event.
+        app.removeListener('listen for answer submission', listenForAnswerSubmission);
+        
+        // See app.removeListener('listen for answer submission', listenForAnswerSubmission) comment
+        app.removeListener('handle answer selection', appHandleAnswerSelection);
+        
         // End game if no users are left in game (this will probably result in a buggy next game: may need to clear all these variables when a user joins and also remove some event listeners) 
         console.log('Users left in game after most recent disconnect (happened @ ' + new Date + '): ' + tabulateSockets('users').length);
         if (tabulateSockets('users').length === 0) {
@@ -333,8 +339,7 @@ function handleClientConnects() {
         socket.removeListener('selected answer', clientSelectedAnswer);
       }
       
-      // Remove this listener so that when the next game starts it no longer exists and when that game creates the same listener there will only be 1
-      app.removeListener('handle answer selection', appHandleAnswerSelection);
+      
     }
     
     app.on('listen for answer submission', listenForAnswerSubmission)
@@ -345,14 +350,14 @@ function handleClientConnects() {
         console.log('ADDED ANSWER SUBMISSION LISTENER. Here are the number of those listeners currently added to this socket: (socket username:' + socket.username + ') ' + socket.listeners('answer submission', answerSubmissionParentFunction).length);
       }
       
-      // Remove this listener so only one listener of this type is ever active (On game start this listener is added, so if it weren't removed after it is triggered every new game would add an additional listener
-      app.removeListener('listen for answer submission', listenForAnswerSubmission);
+      
       
       console.log('number of listen for answer submission listeners' + app.listeners('listen for answer submission', answerSubmissionParentFunction).length);
     }
     
     function answerSubmissionParentFunction(answer) {
       answerSubmissionLogic(answer);
+      console.log('answer submitted !!!!!: ' + answer);
     }
 
     function answerSubmissionLogic(answer) {
