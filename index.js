@@ -308,7 +308,7 @@ function handleClientConnects() {
       function clientSelectedAnswer(selectedAnswer) {
         if (!socket.alreadySelectedAnswer) {
           numberOfUsersDoneSelecting++;
-          console.log('answer selected');
+          console.log('answer selected: ' + selectedAnswer);
           var usersWhoSubmittedSelectedAnswer = []
           // Determines which users submitted the answer that THIS user has just selected
           tabulateSockets('users').forEach(function(currentValue, index, array) {
@@ -331,7 +331,9 @@ function handleClientConnects() {
               app.emit('factoidLoopFinished');
             }
             // Time that the results of the factoid loop is displayed is a function of (and relatively proportional to) the number of players
-            setTimeout(factoidLoopFinishedEvent, (tabulateSockets('users').length * 1000) + 4000);
+            var timeBetweenFactoidLoops = (tabulateSockets('users').length * 1000) + 4000;
+            setTimeout(factoidLoopFinishedEvent, timeBetweenFactoidLoops);
+            console.log('Time between factoid loops: ' + timeBetweenFactoidLoops);
             socket.alreadySelectedAnswer = true;
           }
         }
@@ -362,6 +364,11 @@ function handleClientConnects() {
 
     function answerSubmissionLogic(answer) {
       var currentSocket = socket;
+      // Prevents server from hanging on this factoidLoop because empty string is falsey.
+      if (answer === '') {
+        answer = '<strong style="color: black;">(Didn\'t submit an answer!)</strong>';
+        
+      }
       console.log('answer submission logic invoked');
       // Conditional prevents client from resubmitting answer
       console.log('CURRENT ANSWER SHOULDN\'T BE DEFINED AND ITS VALUE IS: ' + currentSocket.submittedAnswer);

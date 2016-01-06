@@ -392,8 +392,11 @@ function handleServerEmits() {
               // Build the text that describes which users submitted this answer
               function buildUsersWhoSubmittedAnswerText() {
                 var usersWhoSubmittedAnswerText;
-                allAnswerData.selectedAnswerDataPool[i].usersWhoSubmittedSelectedAnswer.forEach(function(currentValue, index, array) {
+               
+               console.log('aaaaTH: ' + allAnswerData.selectedAnswerDataPool[i].usersWhoSubmittedSelectedAnswer);
+               allAnswerData.selectedAnswerDataPool[i].usersWhoSubmittedSelectedAnswer.forEach(function(currentValue, index, array) {
                   // If this is the first user who submitted answer then add its name into usersWhoSubmittedAnswerText, else if the first answer has been added, place a comma and then add the next user
+                  
                   if (!usersWhoSubmittedAnswerText) {
                     usersWhoSubmittedAnswerText = '(submitted by: ' + currentValue;
                   } else {
@@ -412,6 +415,7 @@ function handleServerEmits() {
               var userPickedAnswerText = allAnswerData.selectedAnswerDataPool[i].selectingUser + ' picked: ' + allAnswerData.selectedAnswerDataPool[i].selectedAnswer;
               
               li.innerHTML = userPickedAnswerText + ' ' + usersWhoSubmittedAnswerText;
+              console.log('HEEEEEY: ' + usersWhoSubmittedAnswerText);
               ul.appendChild(li);
             }
             answerDisplay.innerHTML = '';
