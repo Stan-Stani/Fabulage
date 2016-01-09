@@ -353,7 +353,7 @@ function handleClientConnects() {
       }
       
       
-      // TODO: Change this to list the username of the clients where the listeners were started if possible
+      // TODO: Change this to list the username of the clients where the listeners were started if possible. There is a bug where 2 more listeners for answer submission listeners than necessary are active after the first game.
       console.log('number of listen for answer submission listeners' + app.listeners('listen for answer submission', answerSubmissionParentFunction).length);
     }
     
