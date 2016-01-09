@@ -332,6 +332,47 @@ function handleServerEmits() {
             factoidDisplay.innerHTML = (factoid.replace('<BLANK>','_______'));
           });
           
+          var factoidSources = document.getElementById('factoid-sources');
+          
+          handleFactoidSourcesAnimations();
+          
+          function handleFactoidSourcesAnimations() {
+          
+          factoidSources.addEventListener('click', openFactoidSources);
+
+            function openFactoidSources() {
+              factoidSources.removeEventListener('click', openFactoidSources);
+              // Allows scrolling (if necessary) when factoid-sources is open
+              factoidSources.style.overflow = 'auto';
+              factoidSources.classList.remove('factoid-sources-fly-down-animation');
+              factoidSources.classList.add('factoid-sources-fly-up-animation'); 
+
+              // Timeout waits for animation to finish
+              setTimeout(setUpCloseFactoidSources, 600);
+
+
+            }
+
+            function setUpCloseFactoidSources() {
+              factoidSources.addEventListener('click', closeFactoidSources);
+            }
+
+            function closeFactoidSources() {
+              factoidSources.removeEventListener('click', closeFactoidSources);
+              factoidSources.classList.remove('factoid-sources-fly-up-animation');
+              factoidSources.classList.add('factoid-sources-fly-down-animation');
+              // Timeout waits for animation to finish
+              setTimeout(setUpOpenFactoidSources, 600);
+            }
+
+            function setUpOpenFactoidSources() {
+              factoidSources.style.overflow = 'hidden';
+              factoidSources.addEventListener('click', openFactoidSources);
+            }
+          
+          }
+            
+          
           var awaitingAllPlayersSubmissionsIndicator = document.getElementById('awaiting-all-players-submissions-indicator');
           var userAnswerInputButton = document.getElementById('user-answer-input-button');
           var userAnswerInput = document.getElementById('user-answer-input');

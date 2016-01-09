@@ -93,14 +93,18 @@
       top: -1.5em;
       max-height: 94%;
       width: 100%;
-      overflow: auto;
+      overflow: hidden;
       padding-top: 5px;
       border-radius: 5px;
       text-align: center;
       background-color: orange;
     }
     
-    .factoid-sources-animation {
+    #source-list {
+      text-align: left;
+    }
+    
+    .factoid-sources-fly-up-animation {
       -webkit-animation-name: factoid-sources-fly-up;
       animation-name: factoid-sources-fly-up;
       -webkit-animation-duration: .5s;
@@ -121,9 +125,28 @@
       to {top: -95%;}
     }
     
-    #source-list {
-      text-align: left;
+    .factoid-sources-fly-down-animation {
+      -webkit-animation-name: factoid-sources-fly-down;
+      animation-name: factoid-sources-fly-down;
+      -webkit-animation-duration: .5s;
+      animation-duration: .5s;
+      -webkit-animation-timing-function: linear;
+      animation-timing-function: linear;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
     }
+    
+    @-webkit-keyframes factoid-sources-fly-down {
+      from {top: -95%;}
+      to {top: -1.5em;}
+    }
+    
+    @keyframes factoid-sources-fly-down {
+      from {top: -95%;}
+      to {top: -1.5em;}
+    }
+    
+    
     
       /*!
       * Some animations thanks to: 
@@ -264,8 +287,9 @@
       <div>Choose the answer you think is correct</div>
     </div>
   </section>
+  <!-- The factoid-sources-wrapper is used position the top of the factoid-sources relative to the bottom of screen -->
   <section id="factoid-sources-wrapper">
-    <div id="factoid-sources" class="factoid-sources-animation">
+    <div id="factoid-sources">
       Factoid Sources
       <ol id="source-list">
         <li>hey</li>
