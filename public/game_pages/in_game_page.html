@@ -77,6 +77,54 @@
       max-width: 100%;
     }
     
+    #factoid-sources-wrapper {
+      display: inline-block;
+      position: fixed;
+      right: 10px;
+      top: 100%;
+      height: 100%;
+      width: 20%;
+      text-align: inherit;
+    }
+    
+    #factoid-sources {
+      display: inline-block;
+      position: absolute;
+      top: -1.5em;
+      max-height: 94%;
+      width: 100%;
+      overflow: auto;
+      padding-top: 5px;
+      border-radius: 5px;
+      text-align: center;
+      background-color: orange;
+    }
+    
+    .factoid-sources-animation {
+      -webkit-animation-name: factoid-sources-fly-up;
+      animation-name: factoid-sources-fly-up;
+      -webkit-animation-duration: .5s;
+      animation-duration: .5s;
+      -webkit-animation-timing-function: linear;
+      animation-timing-function: linear;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    
+    @-webkit-keyframes factoid-sources-fly-up {
+      from {top: -1.5em;}
+      to {top: -95%;}
+    }
+    
+    @keyframes factoid-sources-fly-up {
+      from {top: -1.5em;}
+      to {top: -95%;}
+    }
+    
+    #source-list {
+      text-align: left;
+    }
+    
       /*!
       * Some animations thanks to: 
       * animate.css -http://daneden.me/animate
@@ -214,6 +262,77 @@
   <section id="answer-display-wrapper">
     <div id="answer-display" class="color-to-color animated-2s centered-group">
       <div>Choose the answer you think is correct</div>
+    </div>
+  </section>
+  <section id="factoid-sources-wrapper">
+    <div id="factoid-sources" class="factoid-sources-animation">
+      Factoid Sources
+      <ol id="source-list">
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+        <li>hey</li>
+      </ol>
     </div>
   </section>
 </body>
