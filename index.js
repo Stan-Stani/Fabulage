@@ -353,7 +353,7 @@ function handleClientConnects() {
       }
       
       
-      
+      // TODO: Change this to list the username of the clients where the listeners were started if possible
       console.log('number of listen for answer submission listeners' + app.listeners('listen for answer submission', answerSubmissionParentFunction).length);
     }
     
