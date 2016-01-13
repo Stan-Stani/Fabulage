@@ -94,14 +94,32 @@
       height: 94%;
       width: 100%;
       overflow: hidden;
-      padding-top: 5px;
+      padding-top: 0px;
       border-radius: 5px;
       text-align: center;
       background-color: orange;
     }
     
+    #factoid-sources-header {
+      position: relative;
+      height: 1.5em;
+      margin: 0;
+      padding-top: 5px;
+      z-index: 1;
+      font-size: 1em;
+      background-color: #78af00;
+    }
+    
     #source-list {
+      /* All this voodoo is to dynamically size the source list in response to its container, but also keep the factoid-sources-header sibling visible when the sources list is scrolled */
+      position: absolute;
+      box-sizing: border-box;
+      top: -1em;
+      padding-top: 2em;
+      height: 100%;
+      width: 100%;
       text-align: left;
+      overflow: auto;
     }
     
     .factoid-sources-fly-up-animation {
@@ -289,9 +307,104 @@
   </section>
   <!-- The factoid-sources-wrapper is used position the top of the factoid-sources relative to the bottom of screen -->
   <section id="factoid-sources-wrapper">
-    <div id="factoid-sources">
-      Factoid Sources
+    <div id="factoid-sources" >
+      <h3 id="factoid-sources-header">Factoid Sources</h3>
       <ol id="source-list">
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
+        <li>adf</li>
       </ol>
     </div>
   </section>

@@ -333,6 +333,7 @@ function handleServerEmits() {
           });
           
           var factoidSources = document.getElementById('factoid-sources');
+          var factoidSourcesList = document.getElementById('source-list');
           
           handleFactoidSourcesAnimations();
           
@@ -343,7 +344,7 @@ function handleServerEmits() {
             function openFactoidSources() {
               factoidSources.removeEventListener('click', openFactoidSources);
               // Allows scrolling (if necessary) when factoid-sources is open
-              factoidSources.style.overflow = 'auto';
+              factoidSourcesList.style.overflow = 'auto';
               factoidSources.classList.remove('factoid-sources-fly-down-animation');
               factoidSources.classList.add('factoid-sources-fly-up-animation'); 
 
@@ -366,7 +367,7 @@ function handleServerEmits() {
             }
 
             function setUpOpenFactoidSources() {
-              factoidSources.style.overflow = 'hidden';
+              factoidSourcesList.style.overflow = 'hidden';
               factoidSources.addEventListener('click', openFactoidSources);
             }
           
