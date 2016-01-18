@@ -33,8 +33,8 @@ cookiesInfo.printConsoleBeforeScriptLoad();
 
 /*loadMuteState();
 handleMuteToggle('toggle-mute');*/
-loadUsername();;
-alertClientConnect();
+//loadUsername();
+
 handleServerEmits();
 handleClientEmits();
 //fadeOutWelcome();
@@ -210,13 +210,14 @@ function handleServerEmits() {
     console.log(userList);
     
   });
+  });
   
   socket.on('game state', function(gameState) {
     if (gameState === 'game already started') {
       var button = document.getElementById('everybody-in-button');
       button.innerHTML = "Game In Progress! Come Back Later!"
       button.style.backgroundColor = '#e88511';
-    } else if (gameState = 'game not yet started') {
+    } else if (gameState === 'game not yet started') {
       
     }
   });
