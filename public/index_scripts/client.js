@@ -210,7 +210,6 @@ function handleServerEmits() {
     console.log(userList);
     
   });
-  });
   
   socket.on('game state', function(gameState) {
     if (gameState === 'game already started') {
