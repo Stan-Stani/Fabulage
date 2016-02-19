@@ -319,7 +319,7 @@ function handleServerEmits() {
         var inGameDocument = this.responseXML
         
         body.innerHTML = inGameDocument.body.innerHTML;
-        
+        var sourceList = document.getElementById('source-list');
         // Load style form inGameDocument. Only use 1 style sheet in these documents and don't use inline styles to ensure the complete style from one page replaces the other!
         (document.getElementsByTagName('style')[0]).innerHTML = (inGameDocument.getElementsByTagName('style')[0]).innerHTML
         
@@ -338,7 +338,7 @@ function handleServerEmits() {
           handleFactoidSourcesAnimations();
           
           function handleFactoidSourcesAnimations() {
-          
+          //TODO: Add specific button that triggers opening and closing as opposed to how it is now where a click anywhere on the element toggles it.
           factoidSources.addEventListener('click', openFactoidSources);
 
             function openFactoidSources() {
@@ -466,6 +466,17 @@ function handleServerEmits() {
             answerDisplay.appendChild(correctAnswerExplanationDiv);
             answerDisplay.appendChild(correctAnswer);
             awaitingAllPlayersSubmissionsIndicator.style.display = 'none';
+            
+            //Add citation info to sources list
+            appendCitation();
+            
+            function appendCitation() {
+              if (allAnswerData.citationInfo) {
+                sourceList.innerHTML += '<li>' + allAnswerData.citationInfo.source + ' (copiedVerbatim? ' + allAnswerData.citationInfo.copiedVerbatim + ')</li>';
+              } else {
+                sourceList.innerHTML += '<li>(No Source)</li>'
+              }
+            }
           });
           
           socket.on('prepare for new factoid', function() {

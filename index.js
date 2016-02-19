@@ -321,7 +321,7 @@ function handleClientConnects() {
           console.log(tabulateSockets('users').length +'"'+ numberOfUsersDoneSelecting);
           // If this is the last socket that needs to select an answer
           if (tabulateSockets('users').length === numberOfUsersDoneSelecting) {
-            var allAnswerData = {selectedAnswerDataPool: selectedAnswerDataPool, correct: randFactoid.answer};
+            var allAnswerData = {selectedAnswerDataPool: selectedAnswerDataPool, correct: randFactoid.answer, citationInfo: randFactoid.citationInfo};
             io.emit('all answer data', allAnswerData);
             // Reinit numberOfUsersDoneSelecting etc. for next time
             numberOfUsersDoneSelecting = 0;
