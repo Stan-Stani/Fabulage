@@ -101,7 +101,8 @@ var selectedAnswerDataPool = [];
 // Handles initial client connection and data interchange between server and client after that
 function handleClientConnects() {
 //  var fabFactoids = JSON.parse(fs.readFileSync(__dirname + '/game_files/fibbage/fib_factoids.json'))
-  
+
+// copiedVerbatim status is meant to fulfill the Creative Commons Attribution-ShareAlike 3.0 License requirement of indicating changes.
   var fabFactoids = JSON.parse(fs.readFileSync(__dirname + '/game_files/my_factoids/fab_factoids.json'))
   
   // Event listener, runs callback function on a client (socket) connnection event that handles/takes care of this specific client connection
