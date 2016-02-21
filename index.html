@@ -112,6 +112,9 @@
       display: inline-block;
       margin-top: 1px;
       margin-bottom: 5px;
+      /* Addresses the problem of the margin of the Fabulage header preventing the username field from being clickable in some cases. (E.g. when the height of the viewport is small but not small enough for the Fabulage text to move to the left. */
+      z-index: 1;
+      position: relative;
     }
     
     #room-code-input {
@@ -119,6 +122,9 @@
       margin-top: 1px;
       font-weight: bold;
       text-transform: uppercase;
+      /* See "Addresses..." comment of #username-input */
+      z-index: 1;
+      position: relative;
     }
     
     #invalid-credentials-message-display {
