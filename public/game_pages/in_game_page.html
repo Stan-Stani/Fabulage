@@ -110,11 +110,16 @@
       background-color: #78af00;
     }
     
+    #factoid-legal-info-link {
+      position: relative;
+      z-index: 1;
+    }
+    
     #source-list {
       /* All this voodoo is to dynamically size the source list in response to its container, but also keep the factoid-sources-header sibling visible when the sources list is scrolled */
       position: absolute;
       box-sizing: border-box;
-      top: -1em;
+      top: .5em;
       padding-top: 2em;
       height: 100%;
       width: 100%;
@@ -310,6 +315,7 @@
   <section id="factoid-sources-wrapper">
     <div id="factoid-sources" >
       <h3 id="factoid-sources-header">Factoid Sources</h3>
+      <a id="factoid-legal-info-link" href="legal/legal_info.html" target="_blank">Factoid Legal Info</a>
       <ol id="source-list">
       </ol>
     </div>

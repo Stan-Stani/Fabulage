@@ -42,6 +42,7 @@ handleClientEmits();
 
 // ! Central Functions' Definitions Section !
 
+// TODO: PREVENT XSS!
 
 // On page load, reads the 'mute-status' cookie which has the mute state of chat sounds from the last session and applies that cookie to the 'toggle-mute' button and manageSound()
 function loadMuteState() {
@@ -333,16 +334,17 @@ function handleServerEmits() {
           });
           
           var factoidSources = document.getElementById('factoid-sources');
+          var factoidSourcesHeader = document.getElementById('factoid-sources-header');
           var factoidSourcesList = document.getElementById('source-list');
           
           handleFactoidSourcesAnimations();
           
           function handleFactoidSourcesAnimations() {
-          //TODO: Add specific button that triggers opening and closing as opposed to how it is now where a click anywhere on the element toggles it.
-          factoidSources.addEventListener('click', openFactoidSources);
+          //TODO: Add specific button that triggers opening and closing.
+          factoidSourcesHeader.addEventListener('click', openFactoidSources);
 
             function openFactoidSources() {
-              factoidSources.removeEventListener('click', openFactoidSources);
+              factoidSourcesHeader.removeEventListener('click', openFactoidSources);
               // Allows scrolling (if necessary) when factoid-sources is open
               factoidSourcesList.style.overflow = 'auto';
               factoidSources.classList.remove('factoid-sources-fly-down-animation');
@@ -355,11 +357,11 @@ function handleServerEmits() {
             }
 
             function setUpCloseFactoidSources() {
-              factoidSources.addEventListener('click', closeFactoidSources);
+              factoidSourcesHeader.addEventListener('click', closeFactoidSources);
             }
 
             function closeFactoidSources() {
-              factoidSources.removeEventListener('click', closeFactoidSources);
+              factoidSourcesHeader.removeEventListener('click', closeFactoidSources);
               factoidSources.classList.remove('factoid-sources-fly-up-animation');
               factoidSources.classList.add('factoid-sources-fly-down-animation');
               // Timeout waits for animation to finish
@@ -368,7 +370,7 @@ function handleServerEmits() {
 
             function setUpOpenFactoidSources() {
               factoidSourcesList.style.overflow = 'hidden';
-              factoidSources.addEventListener('click', openFactoidSources);
+              factoidSourcesHeader.addEventListener('click', openFactoidSources);
             }
           
           }
