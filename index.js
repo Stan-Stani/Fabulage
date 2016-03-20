@@ -2,7 +2,6 @@
 //TODO: BUG: Server will get locked into a game if last user leaves while game is running game start timer
 //TODO: BUG: Players can join the game when the button says game in progress when the game has ended. This is possible because the button doesn't update itself if the game has ended unless the screen is refreshed. The game will even start and include such players. This bug is just confusing for the user. "Why can I join a game if it is in progress?" Answer: It's not really in progress the button just doesn't update itself. The game has finished since you loaded the page but the button only tells you that a game was in progress when you originally loaded the page.
 
-// Many of the comments and logic in this and associated files are inspired by or copied from socket.io/get-started/chat/ and more from their website.
 
 // ! Global Variables Section !
 var express = require('express');
