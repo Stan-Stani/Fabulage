@@ -80,12 +80,15 @@ function startServingContent() {
   https.listen(httpsPort, function() {
     console.log('https server listening on ' + httpsPort.toString());
   });
+  
+  // 404 Page
+  // Essentially the last middleware indicating that nothing else is to be done / nothing else responded. cf. http://expressjs.com/en/starter/faq.html
+  app.use(function(req, res, next) {
+    res.sendFile(__dirname + '/public/404/404.html');
+  });
 };
 
-// 404 Page
-app.use(function(req, res, next) {
-  res.sendFile(__dirname + '/public/404/404.html');
-});
+
 
 
 // Variables that are shared between sockets
