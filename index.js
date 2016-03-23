@@ -222,7 +222,7 @@ function handleClientConnects() {
       clearTimeout(gameStartTimer);
       if (!gameStarted) {
         io.emit('game start cancelled so stop timer');
-        socket.emit('game start cancelled so change button');
+        io.emit('game start cancelled so change button');
         console.log('game start cancelled');
         everybodyInHasAlreadyBeenClicked = false;
       }
@@ -234,7 +234,8 @@ function handleClientConnects() {
       // If the game hasn't started yet (prevents clients from somehow 'everybody's in' command after game has started and prevents game from being started multiple times in multiple socket instances); Everybodyinhasalready etc prevents multiple timers from being started and there is at least one user
       if (!gameStarted && !everybodyInHasAlreadyBeenClicked && (tabulateSockets('users').length !== 0)) {
         everybodyInHasAlreadyBeenClicked = true;
-        socket.emit('game starting soon so change button');
+        // Changed this from socket.emit(...) to io.emit as I think that's what it should be.
+        io.emit('game starting soon so change button');
         io.emit('game starting soon so start timer');
         
         

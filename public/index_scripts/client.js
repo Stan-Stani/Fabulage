@@ -575,6 +575,7 @@ function handleClientEmits() {
   
   var button = document.getElementById('everybody-in-button');
   button.addEventListener('click', function () {
+  // Now handled by server solely. 
     if (button.innerHTML === "Everybody's In!") {
 //      button.innerHTML = 'Wait!';
 //      button.style.backgroundColor = 'red';

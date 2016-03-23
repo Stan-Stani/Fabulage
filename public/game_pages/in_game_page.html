@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<!-- factoid-sources overflow not working entirely correctly. Overflow won't scroll to show all the text, problem is worse on mobile. -->
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='https://fonts.googleapis.com/css?family=Walter+Turncoat&effect=vintage' rel='stylesheet' type='text/css'>
@@ -19,6 +20,18 @@
       font-family: Arial, sans-serif;
       color: white;
       background-color: #b9a13f;
+    }
+    
+    header {
+      font-family: papyrus, 'Walter Turncoat', arial, sans-serif;
+    }
+    
+    #logo {
+      margin-left: 10px;
+    }
+    
+    #fab-head {
+      margin-top: 0;
     }
     
     #awaiting-all-players-submissions-indicator {
@@ -295,6 +308,9 @@
   
 </head>
 <body>
+  <header>
+    <div id="logo"><h1 id="fab-head">Fabulage</h1></div>
+  </header>
   <div id="awaiting-all-players-submissions-indicator" class="pulse">Waiting for other players to submit...</div>
   <section id="factoid-display-wrapper">
     <div id="factoid-display" class="color-to-color animated-2s centered-group"></div>
